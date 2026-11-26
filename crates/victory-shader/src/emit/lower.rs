@@ -1944,24 +1944,17 @@ impl<'a> Lower<'a> {
                 }
                 _ => {
                     let c = word(self, 1, h)?;
-                    // (operation, complement of src0, complement of src1, complement of the result)
-                    let (f, not_a, not_c, not_r) = match op {
-                        "and" => (Bin::And, false, false, false),
-                        "or" => (Bin::Or, false, false, false),
-                        "xor" => (Bin::Xor, false, false, false),
-                        "andn1" => (Bin::And, true, false, false),
-                        "orn1" => (Bin::Or, true, false, false),
-                        "andn2" => (Bin::And, false, true, false),
-                        "orn2" => (Bin::Or, false, true, false),
-                        "nand" => (Bin::And, false, false, true),
-                        "nor" => (Bin::Or, false, false, true),
-                        "xnor" => (Bin::Xor, false, false, true),
+                    // (operation, complement of src1, complement of the result)
+                    let (f, not_c, not_r) = match op {
+                        "and" => (Bin::And, false, false),
+                        "or" => (Bin::Or, false, false),
+                        "xor" => (Bin::Xor, false, false),
+                        "andn2" => (Bin::And, true, false),
+                        "orn2" => (Bin::Or, true, false),
+                        "nand" => (Bin::And, false, true),
+                        "nor" => (Bin::Or, false, true),
+                        "xnor" => (Bin::Xor, false, true),
                         _ => return Err(ELSEWHERE),
-                    };
-                    let a = if not_a {
-                        self.s.m.bin(at, Bin::Xor, a, ones)
-                    } else {
-                        a
                     };
                     let c = if not_c {
                         self.s.m.bin(at, Bin::Xor, c, ones)
